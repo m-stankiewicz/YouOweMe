@@ -1,0 +1,24 @@
+<?php
+require_once 'UserDAO.php';
+require_once 'User.php';
+
+class LoginController {
+    private $userDAO;
+
+    public function __construct($userDAO) {
+        $this->userDAO = $userDAO;
+    }
+
+    public function login($username, $password) {
+        $user = $this->userDAO->findByUsername($username);
+        if (!$user) {
+            return false;
+        }
+        if (password_verify($password, $user->getPassword())) {
+            $_SESSION['user'] = $user;
+            return true;
+        }
+        return false;
+    }
+}
+?>
